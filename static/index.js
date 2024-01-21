@@ -12,7 +12,7 @@ var globalBlocks = []
 /* JS utilities */
 
 function redirect(path) {
-    window.location.replace(`/${path}`)
+    window.location.pathname = path
 }
 
 /* HTTP utilities */
@@ -69,6 +69,13 @@ function allAlert(text) {
     setTimeout(() => { topBar.innerHTML = "" }, 2500)
 }
 
+// Escape key to go back
+document.onkeydown = (event) => {
+    if (event.key == "Escape") {
+        redirect("")
+    }
+}
+
 // FILL 'EM!
 apiUsers("GET", null, (_, data) => {
     try {
@@ -103,7 +110,7 @@ function chatInit() {
     })
 
     // "Enter" OR button works!
-    let messageBox = document.getElementById("chat-messages")
+    let messageBox = document.getElementById("message-box")
     messageBox.addEventListener("keypress", (event) => {
         if (event.key == "Enter") {
             chatSend()
@@ -126,7 +133,7 @@ function chatUpdate() {
             return
         }
         messageList.innerHTML = ""
-        for (const content of [...globalMessages].reverse()) {
+        for (const content of [...globalMessages].reverse().slice(0, 100)) {
             messageList.innerHTML += `
             <div class="message">
                 <div class="message-user">
@@ -148,6 +155,13 @@ function chatSend() {
         messageBox.value = ""
         chatUpdate()
     })
+}
+
+function chatDebug(x) {
+    for (let i = 0; i < x; i++) {
+        document.getElementById("message-box").value = `${i}`
+        chatSend()
+    }
 }
 
 /* --> account.html */
