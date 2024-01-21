@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="/static/index.css">
+    <script src="/static/index.js"></script>
+    <title>JIB's Anonymous Chat</title>
+</head>
+<body class="center" onload="accountInit()">
+    <div id="topbar"></div>
+    <div id="main-box">
+        <button class="home-button" onclick="redirect('')">🔙</button>
+        <div>
+            <h2>Nickname</h2>
+            <input id="nickname">
+        </div>
+        <div>
+            <h2>Auth-token</h2>
+            <input id="password" type="text" readonly>
+        </div>
+        <button class="center-horizontal" style="margin-top: 10px; margin-bottom: 10px;" onclick="accountSubmit()">Submit</button>
+    </div>
+</body>
+</html>

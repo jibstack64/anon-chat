@@ -1,0 +1,36 @@
+
+#user-list-container {
+    background-color: rgb(255, 225, 186);
+
+    border: 2px solid black;
+    padding: 10px;
+}
+
+#user-list {
+    max-width: 100%;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    width: 500px;
+    height: 500px;
+    overflow: auto;
+    text-align: justify;
+    flex-direction: column-reverse;
+}
+
+.user {
+    font-size: 22px;
+    border: 1px solid rgb(255, 179, 79);
+    background-color: antiquewhite;
+    padding: 3px;
+}
+
+button {
+    float: right;
+    padding: 1px;
+}
+
+button:hover {
+    padding: 1px;
+}

@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+body {
+    background-color: antiquewhite;
+    font-family: "Roboto"
+}
+
+#topbar {
+    z-index: 1000;
+    top: 0;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    background-color: rgb(255, 209, 209);
+}
+
+/* Centers an element. */
+.center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Centers an element vertically. */
+.center-vertical {
+    position: relative;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+/* Centers an element vertically. */
+.center-horizontal {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.home-button {
+    margin-top: 10px;
+    margin-right: 10px;
+    float: right;
+}
+
+button {
+    font-size: 20px;
+    padding: 5px;
+    border: 1px solid rgb(212, 146, 61);
+    background: antiquewhite;
+}
+
+button:hover {
+    font-size: 20px;
+    padding: 5px;
+    border: 1px solid rgb(212, 146, 61);
+    background: rgb(227, 203, 170)
+}
+
+input {
+    font-size: 20px;
+    background-color: rgb(252, 237, 215);
+}

@@ -1,0 +1,17 @@
+
+#main-box {
+    width: fit-content;
+    height: fit-content;
+    background-color: rgb(255, 231, 200);
+    border-radius: 20px;
+    padding: 5px;
+    border: 2px solid rgb(255, 179, 79);
+}
+
+#main-box-topbar {
+    border-bottom: 2px solid rgb(212, 146, 61);
+}
+
+#main-box-content {
+    padding: 10px;
+}

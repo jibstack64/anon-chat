@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="/static/chat.css">
+    <script src="/static/index.js"></script>
+    <title>JIB's Anonymous Chat</title>
+</head>
+<body class="center" onload="chatInit()">
+    <h2 style="float: left; margin-top: 15px; margin-left: 15px;">Chat</h2>
+    <button class="home-button" onclick="redirect('')">🔙</button>
+    <div id="topbar"></div>
+    <div id="chat-container">
+        <ol id="chat-messages"><!-- messages are injected here --></ol>
+    </div>
+    <div id="message-sender-container">
+        <input id="message-box">
+        <button id="message-send" onclick="chatSend()">🚀</button>
+    </div>
+</body>
+</html>
