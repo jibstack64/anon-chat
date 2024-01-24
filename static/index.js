@@ -60,6 +60,8 @@ const apiAuth = (token, handler) =>
     makeRequest("GET", "api/auth", null, token, handler)
 const apiBlocks = (method, identifier, handler) =>
     makeRequest(method, "api/blocks", { "identifier": identifier }, getToken(), handler)
+const apiAdmin = (command, handler) =>
+    makeRequest("POST", "api/admin", { "command": command }, getToken(), handler)
 
 /* --> *.html */
 
@@ -267,3 +269,16 @@ function usersBlock(id) {
         })
     }
 }
+
+/* --> admin.html */
+
+function adminInit() {}
+
+function adminRun() {
+    let commandBox = document.getElementById("command")
+    apiAdmin(commandBox.value, (_, data) => {
+        allAlert(data)
+        commandBox.value = ""
+    })
+}
+

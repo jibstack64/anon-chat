@@ -8,18 +8,15 @@
     <script src="/static/index.js"></script>
     <title>JIB's Anonymous Chat</title>
 </head>
-<body class="center">
+<body class="center" onload="adminInit()">
     <div id="topbar"></div>
+    <h2 style="float: left; margin-top: 15px; margin-left: 15px;">Command</h2>
     <div id="main-box">
-        <div id="main-box-topbar">
-            <h2 style="text-align: center">Welcome!</h2>
+        <button class="home-button" onclick="redirect('')">🔙</button>
+        <div>
+            <input id="command" style="margin: 10px;">
         </div>
-        <div id="main-box-content">
-            <button onclick="redirect('chat')">Chat</button>
-            <button onclick="redirect('account')">Account</button>
-            <button onclick="redirect('users')">Users</button>
-            <button onclick="redirect('admin')">Admin</button>
-        </div>
+        <button class="center-horizontal" style="margin-top: 10px; margin-bottom: 10px;" onclick="adminRun()">Run</button>
     </div>
 </body>
 </html>

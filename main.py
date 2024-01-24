@@ -10,7 +10,9 @@ MAX_NICKNAME_LEN = 12
 KEY_LENGTH = 16
 STORAGE = "storage.json"
 AMNESIA = False
-
+USE_ADMIN = True
+ADMIN_NAME = "Admin"
+ADMIN_TOKEN = "admin"
 
 # Generic codes and their messages
 ERROR_MALFORMED = ("400: Malformed request data.", 400)
@@ -73,6 +75,10 @@ def chat():
 def users():
     return flask.render_template("users.html")
 
+@server.route("/admin", methods=["GET"])
+def admin():
+    return flask.render_template("admin.html")
+
 @server.route("/api/auth", methods=["GET"])
 def api_auth():
     user_index = find_index(users, 1, parse_auth())
@@ -89,9 +95,12 @@ def api_users():
     
     data = flask.request.json
 
-    nickname = data.get("nickname")
+    nickname = sanitise(data.get("nickname")).strip().replace(" ", "")
     if nickname in [None, ""] or len(nickname) > MAX_NICKNAME_LEN:
         return ERROR_MALFORMED
+
+    if nickname.lower() == ADMIN_NAME:
+        return ("Cannot use admin name.", 401)
 
     if find_index(users, 0, nickname) != -1 and users[user_index][0] != nickname:
         return ("Nickname taken.", 401)
@@ -101,7 +110,7 @@ def api_users():
         return (users[-1][1], 201)
 
     if user_index == -1:
-        return ERROR_UNAUTHORISED
+        return ERROR_UNAUTHORISED 
 
     users[user_index][0] = nickname
     return SUCCESS_CHANGED
@@ -119,7 +128,8 @@ def api_messages():
     if user_index == -1:
         return ERROR_UNAUTHORISED
 
-    content = sanitise(data.get("content")).strip()
+    # allow admins to inject raw html cus funny
+    content = sanitise(data.get("content")).strip() if users[user_index][1] != ADMIN_TOKEN else data.get("content").strip()
     if content in [None, ""]:
         return ERROR_MALFORMED
     
@@ -165,6 +175,53 @@ def api_blocks():
     blocks.remove(block)
     return SUCCESS_DONE
 
+@server.route("/api/admin", methods=["POST"])
+def api_admin():
+    user_index = find_index(users, 1, parse_auth())
+    method = flask.request.method
+    data = flask.request.json
+
+    if not USE_ADMIN:
+        return ("Admin is disabled on this server.", 401)
+
+    if user_index == -1:
+        return ERROR_UNAUTHORISED
+
+    if users[user_index][1] != ADMIN_TOKEN:
+        return ERROR_UNAUTHORISED
+
+    command = data.get("command")
+    if command in ["", None]:
+        return ("Invalid command.", 400)
+
+    parts = command.split(" ")
+    command = parts[0]
+
+    if command == "ban":
+        user = find_index(users, 0, parts[1])
+        if user == -1:
+            return ("Could not find user.", 404)
+        if user == user_index:
+            return ("Cannot ban self.", 400)
+        users[user][0] = f"{users[user][0]} <b style=\"color:lightcoral\">(Banned)</b>"
+        users[user][1] = generate_key()
+        return SUCCESS_DONE
+    elif command == "clear":
+        messages.clear()
+        return ("Cleared messages.", 200)
+    elif command == "send":
+        username = parts[1]
+        user = find_index(users, 0, username)
+        if user == -1:
+            return ("User not found.", 404)
+        content = parts[2:]
+        add_message(user, " ".join(content))
+        return ("Created message.", 201)
+
+    else:
+        return ("Invalid command.", 400)
+
+
 if __name__ == "__main__":
     if not AMNESIA:
         storage = {}
@@ -176,6 +233,10 @@ if __name__ == "__main__":
         users = storage.get("users", [])
         blocks = storage.get("blocks", [])
     try:
+        # add admin account if not one already
+        if USE_ADMIN and find_index(users, 1, ADMIN_TOKEN) == -1:
+            add_user(ADMIN_NAME)
+            users[-1][1] = ADMIN_TOKEN
         server.run(*HOST_ADDRESS)
     except KeyboardInterrupt:
         pass
